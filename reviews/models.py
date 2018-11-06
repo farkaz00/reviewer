@@ -1,16 +1,19 @@
 from django.db import models
 
-# Create your models here.
-class Reviewer(models.Model):
-    id = models.AutoField(primary_key=True)
-    first_name = models.CharField(max_length=100)
-    last_name = models.CharField(max_length=100)
-    email = models.EmailField()
-    hash = models.CharField(max_length=255)
+#class Reviewer(models.Model):
+#    id = models.AutoField(primary_key=True)
+#    username = models.CharField(max_length=50)
+#    password = models.CharField(max_length=250)
+#    first_name = models.CharField(max_length=50)
+#    last_name = models.CharField(max_length=50)
+#    email = models.EmailField(max_length=250)
 
 class Company(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=200)
+
+    class Meta:
+        app_label = "reviews"
 
 class Review(models.Model):
 
@@ -28,5 +31,8 @@ class Review(models.Model):
     rating = models.CharField(choices=RATING_CHOICES)
     ip_address = models.IPAddressField()
     submission_date = models.DateField(auto_now=True)
-    reviewer = models.ForeignKey('Reviewer', on_delete=models.CASCADE)
+    reviewer = models.ForeignKey('User', on_delete=models.CASCADE)
     company = models.ForeignKey('Company', on_delete=models.CASCADE)
+
+    class Meta:
+        app_label = "reviews"
