@@ -1,63 +1,35 @@
-from django.shortcuts import render
-from django.http import HttpResponse, HttpResponseRedirect
-from django.template import loader
-
-from django.views.decorators.csrf import csrf_protect, csrf_exempt
-from django.contrib.auth import login, authenticate
 from django.contrib.auth.models import User
 
+from rest_framework import generics, authentication, permissions, status
+from rest_framework.views import APIView
+from rest_framework.response import Response
 
-from reviews.forms import RegisterForm, LoginForm, ReviewForm
-
-
-def register(request):
-    if request.method == "POST":
-        form = RegisterForm(request.POST)
-        return HttpResponse("Registered")
-
-    form = RegisterForm()
-    return render(request, "register.html", {"form": form})
+from .models import Company, Review
+from .serializers import CompanySerializer, UserSerializer
 
 
-def login(request):
-    if request.method != "POST":
-        form = LoginForm()
-        return render(request, "login.html", {"form": form})
-    
-    username = request.POST.get("username", False)
-    password = request.POST.get("password", False)
-    user = authenticate(request, username=username, password=password)
-    print(username, password)
-
-    if user is None:
-        return HttpResponse("Invalid login")
-
-    login(request, user)
-    return HttpResponse("Authenticated")
+class CompanyListCreate(generics.ListCreateAPIView):
+    queryset = Company.objects.all()
+    serializer_class = CompanySerializer
 
 
-def logout(request):
-    return HttpResponse('Logged out')
+class UserCreate(generics.ListCreateAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
 
 
-def create_review(request):
-    if request.method == "POST":
-        form = ReviewForm(request.POST)
-        return HttpResponse("Reviewed")
+class UserListCreate(APIView):
+    #authentication_classes = (authentication.TokenAuthentication,)
+    permission_classes = (permissions.IsAdminUser,)
 
-    form = ReviewForm()
-    return render(request, "review.html", {"form": form})
+    def get(self, request, format=None):
+        usernames = [user.username for user in User.objects.all()]
+        return Response(usernames)
 
-
-def list_reviews(request):
-    return HttpResponse('List reviews')
-
-
-def index(request):
-    return HttpResponse("Hi Reviewer!!")
-
-
-def welcome(request):
-    template = loader.get_template('welcome.html')
-    context = {}
-    return HttpResponse(template.render(context, request))
+    def post(self, request, format=None):
+        print(request.data)
+        serializer = UserSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

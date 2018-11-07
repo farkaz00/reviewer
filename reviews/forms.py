@@ -29,4 +29,3 @@ class ReviewForm(forms.Form):
     title = forms.CharField(max_length=64)
     summary = forms.CharField(widget=forms.Textarea)
     rating = forms.ChoiceField(choices=RATING_CHOICES)
-
