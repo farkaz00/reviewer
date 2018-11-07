@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
 
-from .models import Review, Company
+from .models import ReviewUser, Review, Company
 
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
@@ -16,14 +16,27 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
                 )
 
 
+class ReviewUserSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = ReviewUser
+        fields = (
+                'first_name',
+                'last_name',
+                'username',
+                'email',
+                )
+
+
 class ReviewSerializer(serializers.ModelSerializer):
     class Meta:
         model = Review
         fields = (
-                'id',
+                'company',
+                'reviewer',
                 'title',
                 'summary',
                 'rating',
+                'ip_address',
                 )
 
 
