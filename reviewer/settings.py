@@ -38,21 +38,31 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_extensions',
+    'django_nose',
     'reviewer',
     'reviews',
     'crispy_forms',
     'rest_framework',
+    'rest_framework.authtoken',
 ]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 REST_FRAMEWORK = {
-        # Use Django's standard `django.contrib.auth` permissions,
-        # or allow read-only access for unauthenticated users.
+        'DEFAULT_AUTHENTICATION_CLASSES': (
+                    'rest_framework.authentication.TokenAuthentication',
+                    ),
         'DEFAULT_PERMISSION_CLASSES': [
             'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
             ]
         }
+
+TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
+
+NOSE_ARGS = [
+        '--with-coverage',
+        '--cover-package=reviews',
+        ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

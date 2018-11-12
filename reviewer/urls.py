@@ -21,6 +21,6 @@ import reviews
 
 urlpatterns = [
         url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
-        path('admin/', admin.site.urls),
-        path('reviews/', include('reviews.urls')),
+        #path('admin/', admin.site.urls),
+        path('reviews_v1/', include('reviews.urls')),
 ]
