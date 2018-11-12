@@ -1,7 +1,7 @@
 # Reviewer
 This is a simple Django backend to allow users to submit their reviews to any company registered in the system. It uses a simple `sqlite` database to store the data to ease deployment and taking backups.
 
-## Installation
+## Installation and Deployment
 This application requires `python 3.5.3` or greater and `pip`.
 
 Once the repository has been downloaded, create a python virtual environment and run `pip install -r requirements.txt`.
@@ -9,6 +9,8 @@ Once the repository has been downloaded, create a python virtual environment and
 Create a *super user* by running `python manage.py createsuperuser`.
 
 Run the required migrations by executing `python manage.py migrate`.
+
+Run the tests by executing `python manage.py test`. Although it lists *models.py* they don't require tests since they are plain `django models`.
 
 Run the application by executing `python manage.py runserver`. The server will run on the default route `http://localhost:8000/`.
 
@@ -184,4 +186,3 @@ This endpoint is used to list and create additional reviews into the system. Use
     "ip_address": "192.168.1.1"
 }
 ```
-
